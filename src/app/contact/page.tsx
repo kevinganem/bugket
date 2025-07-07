@@ -4,11 +4,14 @@ import AnimatedSection from "../components/AnimatedSection";
 import ContactForm from "../components/ContactForm";
 import { FaDiscord, FaTwitter, FaEnvelope, FaMapMarkerAlt, FaCommentDots } from "react-icons/fa";
 import { useLanguage } from "../components/LanguageProvider";
+import { useToast } from "../components/Toast";
 
 const iconMap: Record<string, React.ReactNode> = {
   FaDiscord: <FaDiscord className="text-2xl" />,
   FaTwitter: <FaTwitter className="text-2xl" />,
   FaEnvelope: <FaEnvelope className="text-2xl" />,
+  FaLinkedin: <FaCommentDots className="text-2xl" />,
+  FaGithub: <FaCommentDots className="text-2xl" />,
 };
 
 /**
@@ -17,7 +20,12 @@ const iconMap: Record<string, React.ReactNode> = {
  */
 const ContactPage: React.FC = () => {
   const { t } = useLanguage();
-  const socials = t('contact.socials');
+  const toast = useToast();
+  const socials = [
+    { icon: 'FaDiscord', label: 'Discord', url: '#' },
+    { icon: 'FaTwitter', label: 'Twitter', url: '#' },
+    { icon: 'FaLinkedin', label: 'LinkedIn', url: '#' },
+  ];
 
   return (
     <div className="flex flex-col gap-8 pt-16 sm:pt-24">
@@ -51,15 +59,17 @@ const ContactPage: React.FC = () => {
       <AnimatedSection delay={0.1}>
         <div className="flex flex-wrap gap-6 justify-center items-center">
           {Array.isArray(socials) && socials.map((s, i) => (
-            <a
+            <button
               key={i}
-              href={s.url}
-              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#5865f2] via-[#57f287] to-[#eb459e] text-white font-semibold text-lg shadow-neon hover:scale-105 transition-transform duration-300"
-              target="_blank"
-              rel="noopener noreferrer"
+              type="button"
+              className="flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-[#5865f2] via-[#57f287] to-[#eb459e] text-white font-semibold text-lg shadow-neon hover:scale-105 transition-transform duration-300 focus:outline-none"
+              aria-label="Social link soon"
+              onClick={() => toast.show(t('social.soon') as string)}
+              tabIndex={0}
+              style={{ opacity: 0.7, cursor: 'not-allowed' }}
             >
               {iconMap[s.icon] || null} {s.label}
-            </a>
+            </button>
           ))}
         </div>
       </AnimatedSection>
